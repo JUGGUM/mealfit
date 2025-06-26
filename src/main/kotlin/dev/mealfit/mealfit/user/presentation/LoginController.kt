@@ -1,6 +1,6 @@
 package dev.mealfit.mealfit.user.presentation
 
-import dev.mealfit.mealfit.user.application.LoginService
+import dev.mealfit.mealfit.user.application.login.LoginService
 import dev.mealfit.mealfit.user.application.ports.`in`.LoginRequest
 import dev.mealfit.mealfit.user.application.ports.out.LoginResult
 import org.springframework.http.ResponseEntity

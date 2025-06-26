@@ -1,4 +1,4 @@
-package dev.mealfit.mealfit.user.application
+package dev.mealfit.mealfit.user.application.login
 
 import dev.mealfit.mealfit.user.application.ports.`in`.LoginRequest
 import dev.mealfit.mealfit.user.application.ports.out.LoginResult

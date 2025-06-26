@@ -1,4 +1,4 @@
-package dev.mealfit.mealfit.user.application
+package dev.mealfit.mealfit.user.application.login
 
 import org.springframework.stereotype.Component
 
