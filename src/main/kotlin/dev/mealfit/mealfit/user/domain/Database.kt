@@ -1,6 +1,5 @@
 package dev.mealfit.mealfit.user.domain
 
-import jdk.internal.vm.StackChunk.init
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadLocalRandom // 무작위 지연 시간을 위한 클래스
@@ -68,6 +67,6 @@ class Database {
     // (옵션) 테스트용 초기화 메서드
     fun clearAccounts() {
         accounts.clear()
-        init() // 초기 상태로 복원
+        //init() // 초기 상태로 복원
     }
 }
