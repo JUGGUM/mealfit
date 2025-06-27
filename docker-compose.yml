@@ -1,0 +1,17 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/mealfit
+      SPRING_DATASOURCE_USERNAME: mealuser
+      SPRING_DATASOURCE_PASSWORD: mealpass
+      SPRING_JPA_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+    networks:
+      - mealfit-net
+
+networks:
+  mealfit-net:
