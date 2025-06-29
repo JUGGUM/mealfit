@@ -2,8 +2,8 @@ spring:
   application:
     name: MealFit
   datasource:
-    url: jdbc:postgresql://localhost:5432/mealfit
-    #url: jdbc:postgresql://host.docker.internal:5432/mealfit
+    #url: jdbc:postgresql://localhost:5432/mealfit
+    url: jdbc:postgresql://host.docker.internal:5432/mealfit
     username: mealuser
     password: mealpass
   jpa:
