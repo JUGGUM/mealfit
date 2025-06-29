@@ -1,7 +1,7 @@
 package dev.mealfit.mealfit.user.application.login
 
-import dev.mealfit.mealfit.user.application.ports.`in`.LoginRequest
-import dev.mealfit.mealfit.user.application.ports.out.LoginResult
+import dev.mealfit.mealfit.user.application.login.ports.`in`.LoginRequest
+import dev.mealfit.mealfit.user.application.login.ports.out.LoginResult
 import org.springframework.stereotype.Component
 
 @Component("kakao")

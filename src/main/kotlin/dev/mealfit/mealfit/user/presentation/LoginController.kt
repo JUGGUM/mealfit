@@ -1,8 +1,8 @@
 package dev.mealfit.mealfit.user.presentation
 
 import dev.mealfit.mealfit.user.application.login.LoginService
-import dev.mealfit.mealfit.user.application.ports.`in`.LoginRequest
-import dev.mealfit.mealfit.user.application.ports.out.LoginResult
+import dev.mealfit.mealfit.user.application.login.ports.`in`.LoginRequest
+import dev.mealfit.mealfit.user.application.login.ports.out.LoginResult
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 

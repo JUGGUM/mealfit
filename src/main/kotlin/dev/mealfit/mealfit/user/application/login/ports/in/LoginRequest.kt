@@ -1,4 +1,4 @@
-package dev.mealfit.mealfit.user.application.ports.`in`
+package dev.mealfit.mealfit.user.application.login.ports.`in`
 
 data class LoginRequest (
     val token: String,     // 소셜일 경우

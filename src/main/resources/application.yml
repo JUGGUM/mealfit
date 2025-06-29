@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: MealFit
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mealfit
+    #url: jdbc:postgresql://host.docker.internal:5432/mealfit
+    username: mealuser
+    password: mealpass
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # 앱시작시 생성,종료식 삭제(개발용)
+      #ddl-auto: update # 변경사항만 반경(컬럼 추가만 /삭제는 안됌)
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 8081

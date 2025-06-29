@@ -1,4 +1,4 @@
-package dev.mealfit.mealfit.user.application.ports.out
+package dev.mealfit.mealfit.user.application.login.ports.out
 
 data class LoginResult(
     val loginType: String,

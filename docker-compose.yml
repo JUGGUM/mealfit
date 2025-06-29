@@ -10,6 +10,8 @@ services:
       SPRING_DATASOURCE_USERNAME: mealuser
       SPRING_DATASOURCE_PASSWORD: mealpass
       SPRING_JPA_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+    volumes: # 이 부분을 추가합니다.
+      - ./build/libs/mealfit-0.0.1-SNAPSHOT.jar:/app/app.jar
     networks:
       - mealfit-net
 
