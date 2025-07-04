@@ -1,19 +1,27 @@
 package dev.mealfit.mealfit.user.domain
 
+import dev.mealfit.mealfit.common.BaseEntity
 import jakarta.persistence.*
 
 @Entity
 @Table(name = "users")
-data class User(
+class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    val userId: Long = 0,
+    val id: Long? = null,
+
+    @Column(unique = true, nullable = false)
+    val username: String,
 
     @Column(unique = true, nullable = false)
     val email: String,
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     val password: String,
-    // ... 나머지 필드들
-)
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = [JoinColumn(name = "user_id")])
+    @Column(name = "role")
+    val roles: MutableSet<String> = mutableSetOf()
+
+) : BaseEntity()

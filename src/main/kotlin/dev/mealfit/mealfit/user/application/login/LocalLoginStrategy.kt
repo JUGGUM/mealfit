@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component
 class LocalLoginStrategy : LoginStrategy {
     override fun login(request: LoginRequest): LoginResult {
         // DB 아이디(이메일)/비번 체크
-        return LoginResult("LOCAL", success = true, userId = "local789")
+        return LoginResult(
+            "LOCAL", success = true, userId = "local789",
+            token = TODO(),
+            username = TODO()
+        )
     }
 }

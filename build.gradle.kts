@@ -33,6 +33,8 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	// postgresql
 	implementation("org.postgresql:postgresql:42.7.2")
+	// Swagger
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 }
 
 kotlin {

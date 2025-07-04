@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component
 class NaverLoginStrategy : LoginStrategy {
     override fun login(request: LoginRequest): LoginResult {
         // 카카오 OAuth 처리 로직
-        return LoginResult("KAKAO", success = true, userId = "kakao123")
+        return LoginResult(
+            "KAKAO", success = true, userId = "kakao123",
+            token = TODO(),
+            username = TODO()
+        )
     }
 }
