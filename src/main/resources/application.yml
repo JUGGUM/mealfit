@@ -8,11 +8,24 @@ spring:
     password: mealpass
   jpa:
     hibernate:
-      ddl-auto: create-drop # 앱시작시 생성,종료식 삭제(개발용)
-      #ddl-auto: update # 변경사항만 반경(컬럼 추가만 /삭제는 안됌)
+      #ddl-auto: create-drop # 앱시작시 생성,종료식 삭제(개발용)
+      ddl-auto: update # 변경사항만 반경(컬럼 추가만 /삭제는 안됌)
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: mealfit-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#  redis:
+#    host: localhost
+#    port: 6379
 
 server:
   port: 8081
@@ -27,3 +40,8 @@ springdoc:
   show-actuator: true
   # 기본값으로 모든 API 표시
   default-produces-media-type: application/json
+
+redisson:
+  config:
+    singleServerConfig:
+      address: "redis://localhost:6379"

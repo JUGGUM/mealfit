@@ -22,6 +22,5 @@ class User(
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = [JoinColumn(name = "user_id")])
     @Column(name = "role")
-    val roles: MutableSet<String> = mutableSetOf()
-
+    val roles: List<Role>
 ) : BaseEntity()

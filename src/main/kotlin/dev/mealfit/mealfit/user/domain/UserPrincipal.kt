@@ -10,7 +10,7 @@ class UserPrincipal(
 ) : UserDetails {
 
     override fun getAuthorities(): Collection<GrantedAuthority> {
-        return user.roles.map { SimpleGrantedAuthority(it) }
+        return user.roles.map { SimpleGrantedAuthority(it.toString()) }
     }
 
     override fun getPassword(): String = user.password

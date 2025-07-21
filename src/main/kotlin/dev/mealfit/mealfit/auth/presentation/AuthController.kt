@@ -3,6 +3,7 @@ package dev.mealfit.mealfit.auth.presentation
 import dev.mealfit.mealfit.user.application.login.ports.`in`.LoginRequest
 import dev.mealfit.mealfit.user.application.login.ports.out.LoginResult
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -18,15 +19,21 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/auth") // 인증 관련 API는 /api/auth 경로로 설정
 class AuthController(
-    private val authenticationManager: AuthenticationManager
+    private val authenticationManager: AuthenticationManager,
     // JWT 토큰 생성을 위한 서비스 (구현 필요)
     // private val jwtTokenProvider: JwtTokenProvider
 ) {
-
+    private val logger = LoggerFactory.getLogger(this::class.java)
+    /**
+     * 사용자 인증을 위한 로그인 API
+     * @param loginRequest 로그인 요청 DTO
+     * @return 로그인 결과를 포함한 ResponseEntity
+     */
     @PostMapping("/login")
     fun authenticateUser(@RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResult> {
         // 1. AuthenticationManager를 사용하여 사용자 인증을 시도합니다.
         // UsernamePasswordAuthenticationToken을 생성하여 인증 요청을 보냅니다.
+        logger.info("로그인 요청: username=${loginRequest.username}")
         val authentication: Authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(
                 loginRequest.username,

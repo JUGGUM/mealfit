@@ -1,6 +1,9 @@
-package dev.mealfit.mealfit.config
+package dev.mealfit.mealfit.config.security
 
+import dev.mealfit.mealfit.config.security.filter.ExternalApiAccessKeyValidationFilter
 import dev.mealfit.mealfit.user.infrastructure.security.CustomUserDetailsService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -17,8 +20,10 @@ import org.springframework.security.web.SecurityFilterChain
 @EnableWebSecurity // 웹 보안을 활성화합니다.
 class SecurityConfig(
     // 사용자 정보를 로드하는 커스텀 서비스 (아래에서 구현 예정)
-    private val customUserDetailsService: CustomUserDetailsService
+    private val customUserDetailsService: CustomUserDetailsService,
+    private val externalApiAccessKeyValidationFilter: ExternalApiAccessKeyValidationFilter
 ) {
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     // 1. PasswordEncoder 설정
     // 비밀번호를 안전하게 해싱하고 검증하는 데 사용됩니다.
@@ -76,7 +81,7 @@ class SecurityConfig(
             }
 
             // 폼 로그인 기능을 비활성화합니다. (기본 로그인 페이지를 사용하지 않으므로)
-            .formLogin { formLogin -> formLogin.disable() }
+            //.formLogin { formLogin -> formLogin.disable() }
 
             // HTTP Basic 인증 기능을 비활성화합니다.
             .httpBasic { httpBasic -> httpBasic.disable() }
@@ -117,4 +122,10 @@ class SecurityConfig(
 
         return http.build() // SecurityFilterChain 객체를 빌드하여 반환합니다.
     }
+
+//    @Bean
+//    fun externalApiAccessKeyValidationFilter(): ExternalApiAccessKeyValidationFilter {
+//        log.info("ExternalApiAccessKeyValidationFilter bean created")
+//        return externalApiAccessKeyValidationFilter
+//    }
 }
