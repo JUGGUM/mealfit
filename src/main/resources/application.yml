@@ -45,3 +45,6 @@ redisson:
   config:
     singleServerConfig:
       address: "redis://localhost:6379"
+jwt:
+  secret: my-secret-key-that-is-at-least-32-bytes-long
+  expiration: 86400000 # 24시간 (밀리초 단위)

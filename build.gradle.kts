@@ -39,6 +39,11 @@ dependencies {
 	implementation ("org.redisson:redisson-spring-boot-starter:3.22.1")
 	// Kafka
 	implementation("org.springframework.kafka:spring-kafka")
+	// Security
+	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+	implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
+	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5") // JSON 처리용
+	implementation("org.springframework.boot:spring-boot-starter-security")
 }
 
 kotlin {
