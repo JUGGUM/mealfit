@@ -8,18 +8,29 @@ spring:
     password: mealpass
   jpa:
     hibernate:
-      #ddl-auto: create-drop # 앱시작시 생성,종료식 삭제(개발용)
-      ddl-auto: update # 변경사항만 반경(컬럼 추가만 /삭제는 안됌)
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+      ddl-auto: create-drop # 앱시작시 생성,종료식 삭제(개발용)
+      #ddl-auto: update # 변경사항만 반경(컬럼 추가만 /삭제는 안됌)
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
   kafka:
-    bootstrap-servers: kafka:9092
+    #bootstrap-servers: kafka:9092
+    bootstrap-servers: localhost:9092
+    properties:
+      spring.json.trusted.packages: '*'
     consumer:
       group-id: mealfit-group
+      enable-auto-commit: false
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      ack-mode: manual
+      retry:
+        max-attempts: 3
+        backoff:
+          delay: 1000
+          multiplier: 2.0
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer

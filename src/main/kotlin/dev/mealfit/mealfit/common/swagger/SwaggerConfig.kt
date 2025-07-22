@@ -1,4 +1,4 @@
-package dev.mealfit.mealfit.config.swagger
+package dev.mealfit.mealfit.common.swagger
 
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
