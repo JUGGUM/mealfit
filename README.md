@@ -33,6 +33,7 @@ MealFit는 AI를 활용한 **개인 맞춤형 식단 추천 서비스**입니다
 - Apache Kafka + Zookeeper
 - Docker Compose
 - Swagger (springdoc-openapi)
+<img width="241" height="233" alt="image" src="https://github.com/user-attachments/assets/842b1cd5-2191-4e60-bfbf-967fc53c5e44" />
 
 ---
 
@@ -55,3 +56,35 @@ MealFit
 ├── domain              # 핵심 도메인 모델
 ├── infrastructure      # Redis, DB, Kafka 등 외부 인터페이스 구현
 └── config              # Spring Security 및 글로벌 설정
+```
+
+---
+
+## 🚀 실행 방법
+1. Kafka / Zookeeper / PostgreSQL 컨테이너 실행
+```bash
+docker-compose up -d
+```
+- Docker Compose를 통해 컨테이너가 자동 구성됩니다.
+  
+2. Spring Boot 앱 로컬 실행
+```bash
+./gradlew bootRun
+```
+- 실행 후 localhost:8081에서 서비스 접근 가능 Swagger UI: http://localhost:8081/swagger-ui.html
+
+---
+
+## 🧪 테스트 전략
+- ✅ 단위 테스트 구성 중
+- ✅ 통합 테스트에 TestContainers 도입 예정
+- ✅ 인증 흐름, Kafka 이벤트 흐름 로깅 기반 디버깅
+
+---
+
+## 🗺️ 향후 개선 및 계획
+- AWS 기반 무중단 롤링 배포 전략 구축
+- Redis 기반 Refresh 토큰 저장 및 인증 흐름 개선
+- Kafka 메시지 흐름 모니터링 대시보드 연결
+- AI 모델 연동을 통한 식단 추천 고도화
+
