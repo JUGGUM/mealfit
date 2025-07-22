@@ -1,4 +1,4 @@
-package dev.mealfit.mealfit.common // 실제 프로젝트의 common 패키지 경로로 변경하세요.
+package dev.mealfit.mealfit.core // 실제 프로젝트의 common 패키지 경로로 변경하세요.
 
 import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners

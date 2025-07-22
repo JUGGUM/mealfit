@@ -1,4 +1,4 @@
-package dev.mealfit.mealfit.config.error
+package dev.mealfit.mealfit.common.error
 
 import org.springframework.http.HttpStatus
 

@@ -1,5 +1,9 @@
-package dev.mealfit.mealfit.config.error
+package dev.mealfit.mealfit.common.error
 
+import dev.mealfit.mealfit.common.error.exception.CustomBaseException
+import dev.mealfit.mealfit.common.error.exception.PhoneNumberNotFoundException
+import dev.mealfit.mealfit.common.error.exception.UserInvalidException
+import dev.mealfit.mealfit.common.error.exception.UserNotFoundException
 import dev.mealfit.mealfit.config.error.exception.*
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity

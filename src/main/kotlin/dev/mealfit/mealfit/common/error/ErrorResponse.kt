@@ -1,4 +1,4 @@
-package dev.mealfit.mealfit.config.error
+package dev.mealfit.mealfit.common.error
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.databind.annotation.JsonSerialize

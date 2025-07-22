@@ -1,6 +1,6 @@
-package dev.mealfit.mealfit.config.error.exception
+package dev.mealfit.mealfit.common.error.exception
 
-import dev.mealfit.mealfit.config.error.ErrorCode
+import dev.mealfit.mealfit.common.error.ErrorCode
 
 open class NotFoundException(errorCode: ErrorCode) :
     CustomBaseException(errorCode.message, errorCode)
