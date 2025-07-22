@@ -2,7 +2,7 @@ package dev.mealfit.mealfit.user.presentation
 
 import dev.mealfit.mealfit.user.application.signup.SignUpService
 import dev.mealfit.mealfit.user.application.signup.ports.`in`.SignUpRequest
-import dev.mealfit.mealfit.user.infrastructure.security.CustomUserDetailsService
+import dev.mealfit.mealfit.common.security.CustomUserDetailsService
 import dev.mealfit.mealfit.user.presentation.dto.UserResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

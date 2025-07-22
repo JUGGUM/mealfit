@@ -1,6 +1,6 @@
 package dev.mealfit.mealfit.user.domain
 
-import dev.mealfit.mealfit.common.BaseEntity
+import dev.mealfit.mealfit.core.BaseEntity
 import jakarta.persistence.*
 
 @Entity
@@ -19,8 +19,12 @@ class User(
     @Column(nullable = false)
     val password: String,
 
+//    @OneToOne(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+//    val dietSurvey: DietSurvey? = null,
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = [JoinColumn(name = "user_id")])
     @Column(name = "role")
     val roles: List<Role>
+
 ) : BaseEntity()
