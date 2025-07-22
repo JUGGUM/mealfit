@@ -1,7 +1,7 @@
-package dev.mealfit.mealfit.config.security.filter
+package dev.mealfit.mealfit.common.security.filter
 
-import dev.mealfit.mealfit.config.error.ErrorCode
-import dev.mealfit.mealfit.config.error.ErrorResponse
+import dev.mealfit.mealfit.common.error.ErrorCode
+import dev.mealfit.mealfit.common.error.ErrorResponse
 import jakarta.servlet.ServletException
 import org.slf4j.MDC
 import org.springframework.http.HttpStatus

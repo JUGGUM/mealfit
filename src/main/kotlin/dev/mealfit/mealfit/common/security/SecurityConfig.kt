@@ -1,8 +1,6 @@
-package dev.mealfit.mealfit.config.security
+package dev.mealfit.mealfit.common.security
 
-import dev.mealfit.mealfit.config.security.filter.ExternalApiAccessKeyValidationFilter
-import dev.mealfit.mealfit.user.infrastructure.security.CustomUserDetailsService
-import org.slf4j.Logger
+import dev.mealfit.mealfit.common.security.filter.ExternalApiAccessKeyValidationFilter
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

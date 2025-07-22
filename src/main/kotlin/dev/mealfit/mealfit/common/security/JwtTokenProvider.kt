@@ -1,4 +1,4 @@
-package dev.mealfit.mealfit.config.security
+package dev.mealfit.mealfit.common.security
 
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication
 import org.springframework.beans.factory.annotation.Value

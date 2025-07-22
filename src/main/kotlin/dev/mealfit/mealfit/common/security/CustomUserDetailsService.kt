@@ -1,4 +1,4 @@
-package dev.mealfit.mealfit.user.infrastructure.security
+package dev.mealfit.mealfit.common.security
 
 import dev.mealfit.mealfit.user.domai.UserPrincipal
 import dev.mealfit.mealfit.user.infrastructure.persistence.UserRepository

@@ -1,6 +1,6 @@
 package dev.mealfit.mealfit.auth.presentation
 
-import dev.mealfit.mealfit.config.security.JwtTokenProvider
+import dev.mealfit.mealfit.common.security.JwtTokenProvider
 import dev.mealfit.mealfit.user.application.login.ports.`in`.LoginRequest
 import dev.mealfit.mealfit.user.application.login.ports.out.LoginResult
 import dev.mealfit.mealfit.user.domai.UserPrincipal
