@@ -11,6 +11,7 @@ class UserCacheRepository(
     private val redisTemplate: RedisTemplate<String, UserDto>
 ) {
     private val TTL = Duration.ofMinutes(30)
+    // 실시간성이 중요하면 더 짧게 설정할 수 있음
 
     fun getUser(userId: Long): UserDto? {
         return redisTemplate.opsForValue().get("user:$userId")

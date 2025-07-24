@@ -1,9 +1,13 @@
 package dev.mealfit.mealfit.auth.presentation
 
+import dev.mealfit.mealfit.common.security.CustomUserDetailsService
 import dev.mealfit.mealfit.common.security.JwtTokenProvider
 import dev.mealfit.mealfit.user.application.login.ports.`in`.LoginRequest
 import dev.mealfit.mealfit.user.application.login.ports.out.LoginResult
+import dev.mealfit.mealfit.user.application.signup.SignUpService
+import dev.mealfit.mealfit.user.application.signup.ports.`in`.SignUpRequest
 import dev.mealfit.mealfit.user.domai.UserPrincipal
+import dev.mealfit.mealfit.user.presentation.dto.UserResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
@@ -24,7 +28,9 @@ import org.springframework.web.bind.annotation.RestController
 class AuthController(
     private val authenticationManager: AuthenticationManager,
     // JWT 토큰 생성을 위한 서비스 (구현 필요)
-    private val jwtTokenProvider: JwtTokenProvider
+    private val jwtTokenProvider: JwtTokenProvider,
+    private val signUpService: SignUpService,
+    private val customUserDetailsService: CustomUserDetailsService
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -56,7 +62,15 @@ class AuthController(
                 principal.username,
                 principal.authorities.map { it.authority })
             // 4. 로그인 응답 DTO를 생성하여 반환합니다.
-            return ResponseEntity.ok(LoginResult("common", true, "gayoung", jwt, loginRequest.username))
+            return ResponseEntity.ok(
+                LoginResult(
+                    "common",
+                    true,
+                    "gayoung",
+                    jwt,
+                    loginRequest.username
+                )
+            )
         } catch (e: BadCredentialsException) {
             logger.error("로그인 실패: Bad credentials", e)
             return ResponseEntity.status(401)
@@ -64,5 +78,12 @@ class AuthController(
         }
     }
 
+    @PostMapping("/signup")
+    fun signUp(@RequestBody request: SignUpRequest): ResponseEntity<UserResponse> {
+        val userDto = signUpService.signUp(request)
+        val response = UserResponse.from(userDto)
+        customUserDetailsService.loadUserByUsername(userDto.username)
+        return ResponseEntity.ok(response)
+    }
     // 다른 인증 관련 API (예: 회원가입, 비밀번호 재설정 등)를 여기에 추가할 수 있습니다.
 }

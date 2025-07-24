@@ -4,7 +4,6 @@ import dev.mealfit.mealfit.common.error.exception.CustomBaseException
 import dev.mealfit.mealfit.common.error.exception.PhoneNumberNotFoundException
 import dev.mealfit.mealfit.common.error.exception.UserInvalidException
 import dev.mealfit.mealfit.common.error.exception.UserNotFoundException
-import dev.mealfit.mealfit.config.error.exception.*
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.HttpRequestMethodNotSupportedException
@@ -29,7 +28,7 @@ internal class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception::class)
     protected fun handleException(e: Exception): ResponseEntity<ErrorResponse?> {
-        log.error("Exception : {}", e.message)
+        log.error("Unexpected error occurred: ", e)
         return createErrorResponseEntity(ErrorCode.INTERNAL_SERVER_ERROR)
     }
 

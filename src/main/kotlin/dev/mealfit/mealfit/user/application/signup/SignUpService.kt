@@ -7,12 +7,13 @@ import dev.mealfit.mealfit.user.domain.User
 import dev.mealfit.mealfit.user.domain.events.UserSignedUpEvent
 import dev.mealfit.mealfit.user.infrastructure.persistence.UserRepository
 import dev.mealfit.mealfit.user.presentation.dto.UserDto
-import jakarta.transaction.Transactional
 import org.redisson.api.RedissonClient
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Isolation
+import org.springframework.transaction.annotation.Transactional
 import java.util.concurrent.TimeUnit
 
 @Service
@@ -24,7 +25,7 @@ class SignUpService(
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
     //TODO 패스워드 인증번호 확인할때 redis로 설정
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     fun signUp(request: SignUpRequest): UserDto {
         val lockKey = "lock:signup:${request.email}"
         val lock = redissonClient.getLock(lockKey)
@@ -38,16 +39,15 @@ class SignUpService(
                 throw IllegalStateException("다른 가입 요청이 처리 중입니다. 잠시 후 다시 시도해주세요.")
             }
 
-            // 🔐 임계 영역 시작
             if (userRepository.existsByEmail(request.email)) {
                 throw EmailAlreadyUsedException("이미 사용 중인 이메일입니다: ${request.email}")
             }
 
-            val user = User(
+            val user = userRepository.save(User(
                 email = request.email,
                 username = request.username,
                 password = passwordEncoder.encode(request.password),
-                roles = List<Role>(1) { Role.USER } // 기본 역할은 USER
+                roles = List<Role>(1) { Role.USER } )// 기본 역할은 USER
             )
 
             val event = UserSignedUpEvent(

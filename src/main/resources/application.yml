@@ -33,7 +33,7 @@ spring:
           multiplier: 2.0
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 #  redis:
 #    host: localhost
 #    port: 6379
@@ -59,3 +59,26 @@ redisson:
 jwt:
   secret: my-secret-key-that-is-at-least-32-bytes-long
   expiration: 86400000 # 24시간 (밀리초 단위)
+
+# Logging
+logging:
+  level:
+    root: DEBUG
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE # SQL 파라미터 바인딩 TRACE (쿼리 + 파라미터)
+        sql: DEBUG             # 실행되는 SQL 쿼리 DEBUG (쿼리만)
+        orm:                   # org.hibernate.orm...
+          jdbc:
+            bind: TRACE        # ORM의 JDBC 바인딩 TRACE (위 BasicBinder와 유사)
+      springframework:         # org.springframework...
+        http:
+          converter:
+            json: DEBUG        # HTTP JSON 컨버터 DEBUG
+    com:                       # com.fasterxml...
+      fasterxml:
+        jackson:
+          databind: DEBUG      # Jackson 데이터 바인딩 DEBUG
