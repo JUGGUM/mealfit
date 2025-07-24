@@ -3,9 +3,9 @@ spring:
 #    url: ${DATABASE_URL}
 #    username: ${DB_USER}
 #    password: ${DB_PASSWORD}
-    url: postgresql://mealuser:K6fQDtRkLX0aQtiJMIWkVaV6x8LngBi6@dpg-d20tmqje5dus7387ss20-a.oregon-postgres.render.com/mealfit
+    url: jdbc:postgresql://dpg-d20tmqje5dus7387ss20-a.oregon-postgres.render.com:5432/mealfit
     username: mealuser
-    password: mealpass
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: none
