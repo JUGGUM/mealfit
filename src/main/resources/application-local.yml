@@ -1,0 +1,84 @@
+spring:
+  application:
+    name: MealFit
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mealfit
+    #url: jdbc:postgresql://host.docker.internal:5432/mealfit
+    username: mealuser
+    password: mealpass
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # 앱시작시 생성,종료식 삭제(개발용)
+      #ddl-auto: update # 변경사항만 반경(컬럼 추가만 /삭제는 안됌)
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    #bootstrap-servers: kafka:9092
+    bootstrap-servers: localhost:9092
+    properties:
+      spring.json.trusted.packages: '*'
+    consumer:
+      group-id: mealfit-group
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      ack-mode: manual
+      retry:
+        max-attempts: 3
+        backoff:
+          delay: 1000
+          multiplier: 2.0
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#  redis:
+#    host: localhost
+#    port: 6379
+
+server:
+  port: 8081
+
+# Swagger UI 경로 설정
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  # API 경로 패턴 설정
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+  # 기본값으로 모든 API 표시
+  default-produces-media-type: application/json
+
+redisson:
+  config:
+    singleServerConfig:
+      address: "redis://localhost:6379"
+jwt:
+  secret: my-secret-key-that-is-at-least-32-bytes-long
+  expiration: 86400000 # 24시간 (밀리초 단위)
+
+# Logging
+logging:
+  level:
+    root: DEBUG
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE # SQL 파라미터 바인딩 TRACE (쿼리 + 파라미터)
+        sql: DEBUG             # 실행되는 SQL 쿼리 DEBUG (쿼리만)
+        orm:                   # org.hibernate.orm...
+          jdbc:
+            bind: TRACE        # ORM의 JDBC 바인딩 TRACE (위 BasicBinder와 유사)
+      springframework:         # org.springframework...
+        http:
+          converter:
+            json: DEBUG        # HTTP JSON 컨버터 DEBUG
+    com:                       # com.fasterxml...
+      fasterxml:
+        jackson:
+          databind: DEBUG      # Jackson 데이터 바인딩 DEBUG

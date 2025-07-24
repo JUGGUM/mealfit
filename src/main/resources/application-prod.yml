@@ -1,0 +1,22 @@
+spring:
+  datasource:
+#    url: ${DATABASE_URL}
+#    username: ${DB_USER}
+#    password: ${DB_PASSWORD}
+    url: postgresql://mealuser:K6fQDtRkLX0aQtiJMIWkVaV6x8LngBi6@dpg-d20tmqje5dus7387ss20-a.oregon-postgres.render.com/mealfit
+    username: mealuser
+    password: mealpass
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP}
+    consumer:
+      group-id: mealfit-prod
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
