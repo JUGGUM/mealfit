@@ -10,16 +10,20 @@ import dev.mealfit.mealfit.user.domai.UserPrincipal
 import dev.mealfit.mealfit.user.presentation.dto.UserResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.authentication.LockedException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.lang.Exception
 
 
 @Tag(name = "Auth", description = "인증 관련 API") // Swagger 문서화용 태그
@@ -61,20 +65,32 @@ class AuthController(
             val jwt = jwtTokenProvider.createToken(
                 principal.username,
                 principal.authorities.map { it.authority })
+
             // 4. 로그인 응답 DTO를 생성하여 반환합니다.
             return ResponseEntity.ok(
                 LoginResult(
                     "common",
                     true,
-                    "gayoung",
+                    loginRequest.username,
                     jwt,
                     loginRequest.username
                 )
             )
+        } catch (e: UsernameNotFoundException) {
+            logger.error("유저찾을수없음: UsernameNotFoundException", e)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(LoginResult("not_found", false, "", "", loginRequest.username))
         } catch (e: BadCredentialsException) {
-            logger.error("로그인 실패: Bad credentials", e)
-            return ResponseEntity.status(401)
-                .body(LoginResult("fail", false, "", "", loginRequest.username))
+            logger.error("로그인 실패: UsernameNotFoundException", e)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(LoginResult("invalid_password", false, "", "", loginRequest.username))
+        } catch (e: LockedException) {
+            logger.error("잠긴 계정: LockedException", e)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(LoginResult("locked", false, "", "", loginRequest.username))
+        }  catch (e: Exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(LoginResult("locked", false, "", "", loginRequest.username))
         }
     }
 

@@ -63,7 +63,7 @@ jwt:
 # Logging
 logging:
   level:
-    root: DEBUG
+    root: INFO
     org:
       hibernate:
         type:
@@ -82,3 +82,9 @@ logging:
       fasterxml:
         jackson:
           databind: DEBUG      # Jackson 데이터 바인딩 DEBUG
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+      logging: slf4j
+      log-format: "Execute Time: %(executionTime) ms | SQL: %(sql)"

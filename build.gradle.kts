@@ -44,6 +44,9 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
 	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5") // JSON 처리용
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	//p6spy
+	implementation ("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0")
+
 }
 
 kotlin {
