@@ -34,6 +34,7 @@ MealFit는 AI를 활용한 **개인 맞춤형 식단 추천 서비스**입니다
 - Docker Compose
 - Swagger (springdoc-openapi)
 <img width="241" height="233" alt="image" src="https://github.com/user-attachments/assets/842b1cd5-2191-4e60-bfbf-967fc53c5e44" />
+<img width="1484" height="329" alt="image" src="https://github.com/user-attachments/assets/4ffc445a-c708-416a-90e8-00dc5feb9e9e" />
 
 ---
 
