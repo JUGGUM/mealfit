@@ -21,19 +21,19 @@ class SignUpService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
     private val eventPublisher: ApplicationEventPublisher,
-    private val redissonClient: RedissonClient
+//    private val redissonClient: RedissonClient
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
     //TODO 패스워드 인증번호 확인할때 redis로 설정
     @Transactional(isolation = Isolation.READ_COMMITTED)
     fun signUp(request: SignUpRequest): UserDto {
         val lockKey = "lock:signup:${request.email}"
-        val lock = redissonClient.getLock(lockKey)
+       // val lock = redissonClient.getLock(lockKey)
         var isLocked = false
 
         try {
             // 2초 대기 → 락 유지 5초
-            isLocked = lock.tryLock(2, 5, TimeUnit.SECONDS)
+        //    isLocked = lock.tryLock(2, 5, TimeUnit.SECONDS)
 
             if (!isLocked) {
                 throw IllegalStateException("다른 가입 요청이 처리 중입니다. 잠시 후 다시 시도해주세요.")
@@ -64,7 +64,8 @@ class SignUpService(
             throw IllegalStateException("가입 처리 중 중단됨", e)
         } finally {
             if (isLocked) {
-                lock.unlock()
+                logger.error("isLocked.unlock()")
+            // lock.unlock()
             }
         }
     }
