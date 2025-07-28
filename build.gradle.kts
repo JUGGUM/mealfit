@@ -36,7 +36,7 @@ dependencies {
 	// Swagger
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 	// Redisson
-	implementation ("org.redisson:redisson-spring-boot-starter:3.22.1")
+	//implementation ("org.redisson:redisson-spring-boot-starter:3.22.1")
 	// Kafka
 	implementation("org.springframework.kafka:spring-kafka")
 	// Security
