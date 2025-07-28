@@ -7,7 +7,6 @@ import dev.mealfit.mealfit.user.domain.User
 import dev.mealfit.mealfit.user.domain.events.UserSignedUpEvent
 import dev.mealfit.mealfit.user.infrastructure.persistence.UserRepository
 import dev.mealfit.mealfit.user.presentation.dto.UserDto
-import org.redisson.api.RedissonClient
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -27,7 +26,7 @@ class SignUpService(
     //TODO 패스워드 인증번호 확인할때 redis로 설정
     @Transactional(isolation = Isolation.READ_COMMITTED)
     fun signUp(request: SignUpRequest): UserDto {
-        val lockKey = "lock:signup:${request.email}"
+       // val lockKey = "lock:signup:${request.email}"
        // val lock = redissonClient.getLock(lockKey)
         var isLocked = false
 
