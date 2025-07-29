@@ -13,30 +13,6 @@ spring:
 #    properties:
 #      hibernate:
 #        dialect: org.hibernate.dialect.PostgreSQLDialect
-  kafka:
-    #bootstrap-servers: kafka:9092
-    bootstrap-servers: localhost:9092
-    properties:
-      spring.json.trusted.packages: '*'
-    consumer:
-      group-id: mealfit-group
-      enable-auto-commit: false
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    listener:
-      ack-mode: manual
-      retry:
-        max-attempts: 3
-        backoff:
-          delay: 1000
-          multiplier: 2.0
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-#  redis:
-#    host: localhost
-#    port: 6379
 
 server:
   port: 8081
@@ -52,18 +28,14 @@ springdoc:
   # 기본값으로 모든 API 표시
   default-produces-media-type: application/json
 
-redisson:
-  config:
-    singleServerConfig:
-      address: "redis://localhost:6379"
 jwt:
-  secret: my-secret-key-that-is-at-least-32-bytes-long
-  expiration: 86400000 # 24시간 (밀리초 단위)
+  secret-key: your-very-secure-and-long-secret-key-that-is-at-least-64-bytes-in-length-for-HS512-algorithm-!!!!GNFOOD-SECRET-KEY-20250729-EXAMPLE-!!!!
+  expiration-in-milliseconds: 3600000
 
 # Logging
 logging:
   level:
-    root: DEBUG
+    root: INFO
     org:
       hibernate:
         type:
@@ -82,3 +54,9 @@ logging:
       fasterxml:
         jackson:
           databind: DEBUG      # Jackson 데이터 바인딩 DEBUG
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+      logging: slf4j
+      log-format: "Execute Time: %(executionTime) ms | SQL: %(sql)"
