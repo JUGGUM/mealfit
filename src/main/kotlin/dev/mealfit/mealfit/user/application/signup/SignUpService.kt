@@ -28,15 +28,15 @@ class SignUpService(
     fun signUp(request: SignUpRequest): UserDto {
        // val lockKey = "lock:signup:${request.email}"
        // val lock = redissonClient.getLock(lockKey)
-        var isLocked = false
+      //  var isLocked = false
 
         try {
             // 2초 대기 → 락 유지 5초
         //    isLocked = lock.tryLock(2, 5, TimeUnit.SECONDS)
 
-            if (!isLocked) {
-                throw IllegalStateException("다른 가입 요청이 처리 중입니다. 잠시 후 다시 시도해주세요.")
-            }
+//            if (!isLocked) {
+//                throw IllegalStateException("다른 가입 요청이 처리 중입니다. 잠시 후 다시 시도해주세요.")
+//            }
 
             if (userRepository.existsByEmail(request.email)) {
                 throw EmailAlreadyUsedException("이미 사용 중인 이메일입니다: ${request.email}")
@@ -61,11 +61,6 @@ class SignUpService(
         } catch (e: InterruptedException) {
             Thread.currentThread().interrupt()
             throw IllegalStateException("가입 처리 중 중단됨", e)
-        } finally {
-            if (isLocked) {
-                logger.error("isLocked.unlock()")
-            // lock.unlock()
-            }
         }
     }
 }

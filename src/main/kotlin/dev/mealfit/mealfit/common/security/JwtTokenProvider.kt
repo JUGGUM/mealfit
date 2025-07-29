@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Component
+import java.nio.charset.StandardCharsets
 import java.security.Key
 import java.util.*
 import java.util.stream.Collectors
@@ -18,7 +19,7 @@ class JwtTokenProvider(
     @Value("\${jwt.expiration}") private val expirationInMilliseconds: Long
 ) {
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
-    private val key: Key = Keys.hmacShaKeyFor(secretKey.toByteArray())
+    private val key: Key = Keys.hmacShaKeyFor(secretKey.toByteArray(StandardCharsets.UTF_8))
 
     fun generateToken(username: String, roles: List<String>): String {
         val now = Date()
