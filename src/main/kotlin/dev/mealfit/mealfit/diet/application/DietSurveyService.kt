@@ -23,8 +23,7 @@ class DietSurveyService(
 //        }
 
         val user = userRepository.findById(userId).orElseThrow()
-
-        // 생성
+        
         val survey = DietSurvey(
             user = user,
             age = 29,

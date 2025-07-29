@@ -4,16 +4,46 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 @AutoConfigureMockMvc
 class SignUpServiceTest {
-    private val mockUserRepository = mockk<UserRepository>()
-    private val passwordEncoder = BcryptPasswordEncoder()
-    private val service = SignUpService(mockUserRepository, passwordEncoder)
+    @Mock lateinit var userRepository: UserRepository
+    @Mock lateinit var passwordEncoder: PasswordEncoder
+    @Mock lateinit var eventPublisher: ApplicationEventPublisher
+    @Mock lateinit var redissonClient: RedissonClient
+    @Mock lateinit var lock: RLock
+
+    lateinit var signUpService: SignUpService
+
+    @BeforeEach
+    fun setup() {
+        whenever(redissonClient.getLock(any())).thenReturn(lock)
+        signUpService = SignUpService(userRepository, passwordEncoder, eventPublisher, redissonClient)
+    }
 
     @Test
-    fun `회원가입 성공`() {
-        every { mockUserRepository.existsByEmail(any()) } returns false
-        every { mockUserRepository.save(any()) } returns User(...)
+    fun `가입 성공 테스트`() {
+        val request = SignUpRequest("test@email.com", "nickname", "password")
+        whenever(lock.tryLock(any(), any(), any())).thenReturn(true)
+        whenever(userRepository.existsByEmail(any())).thenReturn(false)
+        whenever(passwordEncoder.encode(any())).thenReturn("encodedPassword")
+        whenever(userRepository.save(any())).thenReturn(
+            User(1L, request.email, request.username, "encodedPassword", listOf(Role.USER))
+        )
 
-        val result = service.signUp(SignUpRequest(...))
-        assertEquals(result.email, "test@example.com")
+        val result = signUpService.signUp(request)
+
+        assertEquals(request.email, result.email)
+        verify(eventPublisher).publishEvent(any())
+        verify(lock).unlock()
+    }
+
+    @Test
+    fun `이미 존재하는 이메일이면 예외 발생`() {
+        val request = SignUpRequest("duplicate@email.com", "nick", "pass")
+        whenever(lock.tryLock(any(), any(), any())).thenReturn(true)
+        whenever(userRepository.existsByEmail(any())).thenReturn(true)
+
+        assertThrows(EmailAlreadyUsedException::class.java) {
+            signUpService.signUp(request)
+        }
+        verify(lock).unlock()
     }
 }
