@@ -13,6 +13,11 @@ enum class ErrorCode(
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E1", "서버 에러가 발생했습니다.", "ERROR", "E1"),
     METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "E2", "잘못된 HTTP 메서드를 호출했습니다.", "ERROR", "E2"),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "E3", "잘못된 요청입니다", "ERROR", "E3"),
+    // 인증/권한 관련 오류 (수정)
+    FORBIDDEN(HttpStatus.FORBIDDEN, "A1", "접근 권한이 없습니다.", "AUTH_ERROR", "A1"), // 403 Forbidden
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "A2", "인증되지 않은 사용자입니다.", "AUTH_ERROR", "A2"), // 401 Unauthorized
+    // UNAUTHENTICATED 같은 이름도 고려해볼 수 있습니다. (인증되지 않음)
+    // INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "A3", "유효하지 않거나 만료된 토큰입니다.", "AUTH_ERROR", "A3") // JWT 관련 추가 가능
 
     // 리소스 관련 오류
     NOT_FOUND(HttpStatus.NOT_FOUND, "E4", "존재하지 않는 엔티티입니다.", "ERROR", "E4"),

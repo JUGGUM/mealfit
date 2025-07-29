@@ -1,6 +1,9 @@
 package dev.mealfit.mealfit.common.security
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import dev.mealfit.mealfit.common.error.ErrorCode
 import dev.mealfit.mealfit.common.security.filter.ExternalApiAccessKeyValidationFilter
+import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -13,13 +16,18 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration // 스프링 설정 클래스임을 나타냅니다.
 @EnableWebSecurity // 웹 보안을 활성화합니다.
 class SecurityConfig(
     // 사용자 정보를 로드하는 커스텀 서비스 (아래에서 구현 예정)
     private val customUserDetailsService: CustomUserDetailsService,
-    private val externalApiAccessKeyValidationFilter: ExternalApiAccessKeyValidationFilter
+    private val externalApiAccessKeyValidationFilter: ExternalApiAccessKeyValidationFilter,
+    // JWT 인증 필터 (생성자 주입)
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+    // JSON 응답을 위한 ObjectMapper (예외 처리 응답을 위해 주입)
+    private val objectMapper: ObjectMapper
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -68,6 +76,7 @@ class SecurityConfig(
                     // /api/auth/** 경로는 인증 없이 누구나 접근 가능하도록 허용합니다.
                     // 회원가입, 로그인 등의 인증 관련 API는 여기에 해당됩니다.
                     .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // <-- Swagger 경로 추가
                     // 다른 모든 요청은 인증된 사용자만 접근할 수 있도록 요구합니다.
                     .anyRequest().authenticated()
             }
@@ -99,24 +108,40 @@ class SecurityConfig(
 
             // 예외 처리 설정을 정의합니다.
             .exceptionHandling { exceptionHandling ->
-                // 인증되지 않은 사용자가 보호된 리소스에 접근했을 때
+                // 인증되지 않은 사용자가 보호된 리소스에 접근했을 때 (401 Unauthorized)
                 exceptionHandling.authenticationEntryPoint { request, response, authException ->
-                    response.status = 401 // Unauthorized 상태 코드 반환
-                    response.writer.write("Unauthorized: " + authException.message)
+                    logger.warn("Unauthorized access attempt: {}", authException.message)
+                    response.status = HttpServletResponse.SC_UNAUTHORIZED // 401 Unauthorized 상태 코드 반환
+                    // 커스텀 ErrorResponse를 JSON으로 반환 (ObjectMapper 주입 필요)
+                    response.contentType = "application/json;charset=UTF-8"
+                    objectMapper.writeValue(response.writer, ErrorCode.UNAUTHORIZED)
                 }
-                // 권한이 없는 사용자가 리소스에 접근했을 때
+                // 권한이 없는 사용자가 리소스에 접근했을 때 (403 Forbidden)
                 exceptionHandling.accessDeniedHandler { request, response, accessDeniedException ->
-                    response.status = 403 // Forbidden 상태 코드 반환
-                    response.writer.write("Forbidden: " + accessDeniedException.message)
+                    logger.warn("Access denied for user: {}", accessDeniedException.message)
+                    response.status = HttpServletResponse.SC_FORBIDDEN // 403 Forbidden 상태 코드 반환
+                    // 커스텀 ErrorResponse를 JSON으로 반환 (ObjectMapper 주입 필요)
+                    response.contentType = "application/json;charset=UTF-8"
+                    objectMapper.writeValue(response.writer, ErrorCode.FORBIDDEN)
                 }
             }
 
         // 인증 프로바이더를 SecurityFilterChain에 추가합니다.
+        // 이 부분 때문에 "AuthenticationManager configured with an AuthenticationProvider bean" 경고가 발생합니다.
+        // 이는 의도된 설정이므로 괜찮습니다.
         http.authenticationProvider(authenticationProvider())
 
-        // (선택 사항: JWT 또는 다른 커스텀 필터가 있다면 여기에 추가)
-        // 예를 들어, JWT 인증 필터를 UsernamePasswordAuthenticationFilter 이전에 추가할 수 있습니다.
-        // http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter::class.java)
+        // !!!!! 가장 중요: JWT 인증 필터를 UsernamePasswordAuthenticationFilter 이전에 추가 !!!!!
+        // 모든 요청에 대해 JWT 토큰을 검증하여 인증된 사용자인지 확인합니다.
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+
+        // 외부 API 접근 키 유효성 검사 필터 추가
+        // JWT 필터보다 먼저 실행되어야 할 수도 있습니다 (외부 API는 JWT 없이 접근키만으로 인증될 경우).
+        // 적절한 필터 체인 위치를 고려하여 추가합니다.
+        // 예를 들어, JWT 필터보다 먼저 실행되어야 한다면:
+        http.addFilterBefore(externalApiAccessKeyValidationFilter, JwtAuthenticationFilter::class.java)
+        // 또는 특정 인증 필터 이전에 추가 (예: UsernamePasswordAuthenticationFilter 이전에 추가)
+        // http.addFilterBefore(externalApiAccessKeyValidationFilter, UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build() // SecurityFilterChain 객체를 빌드하여 반환합니다.
     }

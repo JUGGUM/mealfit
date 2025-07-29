@@ -46,7 +46,7 @@ class SignUpService(
                 email = request.email,
                 username = request.username,
                 password = passwordEncoder.encode(request.password),
-                roles = List<Role>(1) { Role.USER } )// 기본 역할은 USER
+                roles = List(1) { Role.USER } )// 기본 역할은 USER
             )
 
             val event = UserSignedUpEvent(
