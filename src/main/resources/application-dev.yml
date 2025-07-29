@@ -29,8 +29,8 @@ springdoc:
   default-produces-media-type: application/json
 
 jwt:
-  secret-key: your-very-secure-and-long-secret-key-that-is-at-least-64-bytes-in-length-for-HS512-algorithm-!!!!GNFOOD-SECRET-KEY-20250729-EXAMPLE-!!!!
-  expiration-in-milliseconds: 3600000
+  secret: your-very-secure-and-long-secret-key-that-is-at-least-64-bytes-in-length-for-HS512-algorithm-!!!!GNFOOD-SECRET-KEY-20250729-EXAMPLE-!!!!
+  expiration: 3600000
 
 # Logging
 logging:
