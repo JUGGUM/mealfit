@@ -62,7 +62,7 @@ class AuthController(
             // 3. JWT 토큰을 생성합니다. (jwtTokenProvider가 있다고 가정)
             val principal =
                 authentication.principal as UserPrincipal
-            val jwt = jwtTokenProvider.createToken(
+            val jwt = jwtTokenProvider.generateToken(
                 principal.username,
                 principal.authorities.map { it.authority })
 
