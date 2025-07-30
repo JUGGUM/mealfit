@@ -127,8 +127,6 @@ class SecurityConfig(
             }
 
         // 인증 프로바이더를 SecurityFilterChain에 추가합니다.
-        // 이 부분 때문에 "AuthenticationManager configured with an AuthenticationProvider bean" 경고가 발생합니다.
-        // 이는 의도된 설정이므로 괜찮습니다.
         http.authenticationProvider(authenticationProvider())
 
         // !!!!! 가장 중요: JWT 인증 필터를 UsernamePasswordAuthenticationFilter 이전에 추가 !!!!!
