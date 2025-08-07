@@ -28,6 +28,7 @@ class UserSignedUpEventHandler(
             nickname = event.nickname,
             joinedAt = System.currentTimeMillis()
         )
+        // 사용자의 개인정보 입력받아 저장하는 api
         dietSurveyService.createInitialSurvey(payload.userId, payload.nickname)
        // kafkaTemplate.send("user.signed-up", payload)
         logger.info("UserSignedUpEvent handled and sent to Kafka: $payload")
