@@ -17,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration // 스프링 설정 클래스임을 나타냅니다.
 @EnableWebSecurity // 웹 보안을 활성화합니다.
@@ -63,7 +66,7 @@ class SecurityConfig(
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             // CORS(Cross-Origin Resource Sharing) 설정을 기본값으로 활성화합니다.
-            .cors { it.disable() } // 필요에 따라 .cors { cors -> cors.disable() } 또는 .cors {} 로 설정
+            .cors { cors -> cors.configurationSource(corsConfigurationSource()) }
 
             // CSRF(Cross-Site Request Forgery) 보호를 비활성화합니다.
             // REST API에서는 세션 기반 인증이 아니므로 CSRF 보호가 필요하지 않은 경우가 많습니다.
@@ -142,6 +145,28 @@ class SecurityConfig(
         // http.addFilterBefore(externalApiAccessKeyValidationFilter, UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build() // SecurityFilterChain 객체를 빌드하여 반환합니다.
+    }
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration().apply {
+            // 허용할 출처(Origin) 목록 설정
+            allowedOrigins = listOf("http://localhost:3000", "https://your-frontend-domain.com")
+
+            // 허용할 HTTP 메서드(GET, POST 등)
+            allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+
+            // 인증 정보를 함께 보낼지 여부
+            allowCredentials = true
+
+            // 허용할 헤더 목록
+            allowedHeaders = listOf("*")
+        }
+
+        val source = UrlBasedCorsConfigurationSource().apply {
+            registerCorsConfiguration("/**", configuration) // 모든 경로에 CORS 설정 적용
+        }
+        return source
     }
 
 //    @Bean
