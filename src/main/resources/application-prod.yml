@@ -24,5 +24,5 @@ spring:
 #      host: ${REDIS_HOST}
 #      port: ${REDIS_PORT}
 jwt:
-  secret: my-secret-key-that-is-at-least-32-bytes-long
+  secret: B4003C643033F531C2D9914AE1A96A62DB5C549F15F05B8C0D41E7A8A36979A46410C5D7653556079943B73C4880AF6C
   expiration: 86400000 # 24시간 (밀리초 단위)
