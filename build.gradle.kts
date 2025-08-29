@@ -36,17 +36,18 @@ dependencies {
 	// Swagger
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 	// Redisson
-	implementation ("org.redisson:redisson-spring-boot-starter:3.22.1")
+	//implementation ("org.redisson:redisson-spring-boot-starter:3.22.1")
 	// Kafka
-	implementation("org.springframework.kafka:spring-kafka")
+	//implementation("org.springframework.kafka:spring-kafka")
 	// Security
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
 	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5") // JSON 처리용
 	implementation("org.springframework.boot:spring-boot-starter-security")
-	//p6spy
-	implementation ("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0")
 
+	// OpenAI GPT-3
+	implementation("com.theokanning.openai-gpt3-java:service:0.14.0") // OpenAI 클라이언트
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
 
 kotlin {
