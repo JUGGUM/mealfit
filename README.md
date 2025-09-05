@@ -88,4 +88,5 @@ docker-compose up -d
 - Redis 기반 Refresh 토큰 저장 및 인증 흐름 개선
 - Kafka 메시지 흐름 모니터링 대시보드 연결
 - AI 모델 연동을 통한 식단 추천 고도화
+- 미니 쿠버네티스 실습 구축
 
