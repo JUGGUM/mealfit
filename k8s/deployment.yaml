@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mealfit-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mealfit
+  template:
+    metadata:
+      labels:
+        app: mealfit
+    spec:
+      containers:
+        - name: backend
+          image: mealfit-backend
+          ports:
+            - containerPort: 8080
