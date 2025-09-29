@@ -44,10 +44,10 @@ class AuthController(
         try {
             // 1. AuthenticationManager를 사용하여 사용자 인증을 시도합니다.
             // UsernamePasswordAuthenticationToken을 생성하여 인증 요청을 보냅니다.
-            logger.info("로그인 요청: username=${loginRequest.username}")
+            logger.info("로그인 요청: username=${loginRequest.email}")
             val authentication: Authentication = authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(
-                    loginRequest.username,
+                    loginRequest.email,
                     loginRequest.password
                 )
             )
@@ -68,13 +68,13 @@ class AuthController(
                     true,
                     "gayoung",
                     jwt,
-                    loginRequest.username
+                    loginRequest.email
                 )
             )
         } catch (e: BadCredentialsException) {
             logger.error("로그인 실패: Bad credentials", e)
             return ResponseEntity.status(401)
-                .body(LoginResult("fail", false, "", "", loginRequest.username))
+                .body(LoginResult("fail", false, "", "", loginRequest.email))
         }
     }
 
