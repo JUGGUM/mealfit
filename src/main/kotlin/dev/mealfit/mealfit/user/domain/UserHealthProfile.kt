@@ -1,5 +1,7 @@
 package dev.mealfit.mealfit.user.domain
 
+import dev.mealfit.mealfit.diet.domain.DietGoal
+import dev.mealfit.mealfit.diet.domain.Gender
 import jakarta.persistence.*
 
 @Entity
@@ -13,5 +15,32 @@ data class UserHealthProfile(
     @JoinColumn(name = "user_id")
     val user: User,
 
-    // ... 건강 정보 필드들
+
+    @Column(nullable = false)
+    val age: Int,
+
+    @Column(nullable = false)
+    val gender: Gender, // enum class Gender { MALE, FEMALE, OTHER }
+
+    @Column(nullable = false)
+    val heightCm: Int,
+
+    @Column(nullable = false)
+    val weightKg: Int,
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    val goal: DietGoal,
+
+    @Column
+    val activityLevel: String?, // 예: "LOW", "MODERATE", "HIGH"
+
+    @Column
+    val allergies: String?, // 예: "peanuts, dairy"
+
+    @Column
+    val preferredFoods: String?, // 예: "chicken, broccoli"
+
+    @Column
+    val mealsPerDay: Int = 3
 )
