@@ -22,7 +22,8 @@ class DietSurveyService(
 //            return
 //        }
 
-        val user = userRepository.findById(userId).orElseThrow()
+        val user = userRepository.findById(userId)
+            .orElseThrow { IllegalArgumentException("존재하지 않는 사용자입니다: $userId") }
 
         // 생성
         val survey = DietSurvey(

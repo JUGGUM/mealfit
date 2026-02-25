@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.security.Key
 import java.util.*
-import java.util.stream.Collectors
 
 @Component
 class JwtTokenProvider(
@@ -53,9 +52,7 @@ class JwtTokenProvider(
 
         // "roles" 클레임을 추출하고 GrantedAuthority 객체 리스트로 변환
         val roles = claims["roles"] as? List<String> ?: emptyList()
-        return roles.stream()
-            .map { SimpleGrantedAuthority(it) }
-            .collect(Collectors.toList())
+        return roles.map { SimpleGrantedAuthority(it) }
     }
 
     // JWT 토큰의 유효성을 검사하는 메서드

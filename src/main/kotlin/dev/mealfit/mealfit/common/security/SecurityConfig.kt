@@ -79,6 +79,7 @@ class SecurityConfig(
                     // /api/auth/** 경로는 인증 없이 누구나 접근 가능하도록 허용합니다.
                     // 회원가입, 로그인 등의 인증 관련 API는 여기에 해당됩니다.
                     .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/login/**").permitAll()
                     .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // <-- Swagger 경로 추가
                     // 다른 모든 요청은 인증된 사용자만 접근할 수 있도록 요구합니다.
                     .anyRequest().authenticated()
@@ -151,7 +152,7 @@ class SecurityConfig(
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration().apply {
             // 허용할 출처(Origin) 목록 설정
-            allowedOrigins = listOf("http://localhost:3000", "https://your-frontend-domain.com")
+            allowedOrigins = listOf("http://localhost:3000")
 
             // 허용할 HTTP 메서드(GET, POST 등)
             allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")

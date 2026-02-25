@@ -3,11 +3,13 @@ package dev.mealfit.mealfit.user.presentation
 import dev.mealfit.mealfit.user.application.login.LoginService
 import dev.mealfit.mealfit.user.application.login.ports.`in`.LoginRequest
 import dev.mealfit.mealfit.user.application.login.ports.out.LoginResult
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
+@Tag(name = "Login", description = "로그인 관련 API")
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/api/login")
 class LoginController(private val loginService: LoginService) {
 
     @PostMapping("/{type}")

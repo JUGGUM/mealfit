@@ -5,37 +5,19 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import org.springframework.http.HttpStatus
 import java.time.LocalDateTime.now
 
-class ErrorResponse {
+class ErrorResponse private constructor(code: ErrorCode) {
     @JsonSerialize(using = com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer::class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
-    private var timestamp: java.time.LocalDateTime
+    var timestamp: java.time.LocalDateTime = now()
 
-    private var code: String
-    private var message: String
-    private var status: HttpStatus
+    var code: String = code.code
+    var message: String = code.message
+    var status: HttpStatus = code.status
 
-    private var error_code: String
-    private var error_status: String
+    var error_code: String = code.error_code
+    var error_status: String = code.error_status
 
-
-    private constructor(code: ErrorCode) {
-        this.timestamp = now()
-        this.status = code.status
-        this.code = code.code
-        this.message = code.message
-        this.error_code = code.error_code
-        this.error_status = code.error_status
-    }
-
-    constructor(status: HttpStatus?, code: ErrorCode) {
-        this.timestamp = now()
-        this.status = code.status
-        this.code = code.code
-        this.message = code.message
-
-        this.error_code = code.error_code
-        this.error_status = code.error_status
-    }
+    constructor(status: HttpStatus?, code: ErrorCode) : this(code)
 
     companion object {
         fun of(code: ErrorCode): ErrorResponse {
