@@ -1,4 +1,4 @@
-package dev.mealfit.mealfit.user.domai
+package dev.mealfit.mealfit.user.domain
 
 import dev.mealfit.mealfit.user.domain.User
 import org.springframework.security.core.GrantedAuthority

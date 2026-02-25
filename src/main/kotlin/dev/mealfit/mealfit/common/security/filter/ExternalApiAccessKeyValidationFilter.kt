@@ -41,7 +41,7 @@ class ExternalApiAccessKeyValidationFilter : OncePerRequestFilter() {
             val accessKey = request.getHeader("X-Voucher-Access-Key")
             val authCode = request.getHeader("AuthCode")
 
-            MDC.put("X-Voucher-Access-Key", accessKey)
+            MDC.put("X-Voucher-Access-Key", accessKey?.takeLast(4)?.padStart(accessKey.length, '*') ?: "")
 
             logger.debug("================>>authCode $authCode")
 
@@ -63,7 +63,7 @@ class ExternalApiAccessKeyValidationFilter : OncePerRequestFilter() {
                 return
             }
 
-            logger.debug("================>> $accessKey")
+            logger.debug("================>> accessKey present")
 
 //            if (!giftCardService.isValidAccessKey(accessKey)) {
 //                val json = objectMapper.writeValueAsString(
@@ -76,7 +76,7 @@ class ExternalApiAccessKeyValidationFilter : OncePerRequestFilter() {
 //                return
 //            }
 
-            logger.debug("================>> $accessKey")
+            logger.debug("================>> accessKey validated")
         }
         filterChain.doFilter(request, response)
     }

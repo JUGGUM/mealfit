@@ -1,6 +1,6 @@
 package dev.mealfit.mealfit.common.security
 
-import dev.mealfit.mealfit.user.domai.UserPrincipal
+import dev.mealfit.mealfit.user.domain.UserPrincipal
 import dev.mealfit.mealfit.user.infrastructure.persistence.UserRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
