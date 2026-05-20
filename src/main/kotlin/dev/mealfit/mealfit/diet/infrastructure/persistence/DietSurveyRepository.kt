@@ -4,4 +4,5 @@ import dev.mealfit.mealfit.diet.domain.DietSurvey
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface DietSurveyRepository : JpaRepository<DietSurvey, Long> {
+    fun findByUser_Id(userId: Long): DietSurvey?
 }

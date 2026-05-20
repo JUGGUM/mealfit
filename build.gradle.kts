@@ -19,6 +19,8 @@ repositories {
 	mavenCentral()
 }
 
+extra["springAiVersion"] = "1.0.0"
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")
@@ -39,11 +41,18 @@ dependencies {
 	//implementation ("org.redisson:redisson-spring-boot-starter:3.22.1")
 	// Kafka
 	//implementation("org.springframework.kafka:spring-kafka")
-	// Security
+	// JWT
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
-	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5") // JSON 처리용
-	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
+	// Spring AI - OpenAI (GPT-4o-mini)
+	implementation("org.springframework.ai:spring-ai-starter-model-openai")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.ai:spring-ai-bom:${property("springAiVersion")}")
+	}
 }
 
 kotlin {

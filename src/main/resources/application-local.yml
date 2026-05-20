@@ -8,11 +8,8 @@ spring:
     password: mealpass
   jpa:
     hibernate:
-      ddl-auto: create-drop # 앱시작시 생성,종료식 삭제(개발용)
-      #ddl-auto: update # 변경사항만 반경(컬럼 추가만 /삭제는 안됌)
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
+      ddl-auto: create-drop
+      #ddl-auto: update
   kafka:
     #bootstrap-servers: kafka:9092
     bootstrap-servers: localhost:9092
@@ -37,19 +34,23 @@ spring:
 #  redis:
 #    host: localhost
 #    port: 6379
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-4o-mini
+          temperature: 0.7
 
 server:
   port: 8081
 
-# Swagger UI 경로 설정
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
-  # API 경로 패턴 설정
   api-docs:
     path: /api-docs
   show-actuator: true
-  # 기본값으로 모든 API 표시
   default-produces-media-type: application/json
 
 redisson:
@@ -58,9 +59,8 @@ redisson:
       address: "redis://localhost:6379"
 jwt:
   secret: my-secret-key-that-is-at-least-32-bytes-long
-  expiration: 86400000 # 24시간 (밀리초 단위)
+  expiration: 86400000
 
-# Logging
 logging:
   level:
     root: DEBUG
@@ -69,16 +69,16 @@ logging:
         type:
           descriptor:
             sql:
-              BasicBinder: TRACE # SQL 파라미터 바인딩 TRACE (쿼리 + 파라미터)
-        sql: DEBUG             # 실행되는 SQL 쿼리 DEBUG (쿼리만)
-        orm:                   # org.hibernate.orm...
+              BasicBinder: TRACE
+        sql: DEBUG
+        orm:
           jdbc:
-            bind: TRACE        # ORM의 JDBC 바인딩 TRACE (위 BasicBinder와 유사)
-      springframework:         # org.springframework...
+            bind: TRACE
+      springframework:
         http:
           converter:
-            json: DEBUG        # HTTP JSON 컨버터 DEBUG
-    com:                       # com.fasterxml...
+            json: DEBUG
+    com:
       fasterxml:
         jackson:
-          databind: DEBUG      # Jackson 데이터 바인딩 DEBUG
+          databind: DEBUG
