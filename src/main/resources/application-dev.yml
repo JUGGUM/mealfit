@@ -32,6 +32,31 @@ jwt:
   secret: your-very-secure-and-long-secret-key-that-is-at-least-64-bytes-in-length-for-HS512-algorithm-!!!!GNFOOD-SECRET-KEY-20250729-EXAMPLE-!!!!
   expiration: 3600000
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5,0.95,0.99
+      slo:
+        http.server.requests: 100ms,200ms,500ms,1s
+    enable:
+      hikaricp: true
+      jvm: true
+
 # Logging
 logging:
   level:

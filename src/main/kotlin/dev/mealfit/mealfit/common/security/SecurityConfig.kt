@@ -80,8 +80,8 @@ class SecurityConfig(
                     // 회원가입, 로그인 등의 인증 관련 API는 여기에 해당됩니다.
                     .requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers("/api/login/**").permitAll()
-                    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // <-- Swagger 경로 추가
-                    // 다른 모든 요청은 인증된 사용자만 접근할 수 있도록 요구합니다.
+                    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                    .requestMatchers("/actuator/health", "/actuator/info", "/actuator/prometheus").permitAll()
                     .anyRequest().authenticated()
             }
 

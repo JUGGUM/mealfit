@@ -272,6 +272,71 @@ docker-compose down
 
 ---
 
+## 📊 모니터링 (Prometheus + Grafana)
+
+### 서비스 주소
+
+| 서비스 | 주소 | 계정 |
+|--------|------|------|
+| **Grafana** 대시보드 | http://localhost:3000 | admin / mealfit |
+| **Prometheus** UI | http://localhost:9090 | - |
+| **Actuator** 메트릭 | http://localhost:8081/actuator/prometheus | - |
+
+### Docker Compose로 전체 스택 실행
+
+```bash
+# 전체 실행 (앱 + DB + Kafka + Prometheus + Grafana)
+docker-compose up -d
+
+# Grafana만 별도 확인
+docker-compose logs -f grafana
+```
+
+컨테이너가 뜨면 **Grafana (http://localhost:3000)** 에서 바로 `MealFit 모니터링` 대시보드가 표시됩니다.
+
+### 수집 메트릭
+
+| 메트릭 | 설명 | PromQL 예시 |
+|--------|------|------------|
+| **RPS** | 초당 요청 수 | `sum(rate(http_server_requests_seconds_count{job="mealfit-app"}[1m]))` |
+| **응답시간 P99** | 99번째 백분위 | `histogram_quantile(0.99, sum(rate(http_server_requests_seconds_bucket[5m])) by (le))` |
+| **HTTP 상태별** | 2xx / 4xx / 5xx 비율 | `sum(rate(...{status=~"5.."}[1m]))` |
+| **JVM Heap** | 힙 사용량 | `sum(jvm_memory_used_bytes{area="heap"})` |
+| **GC 횟수** | GC 일시정지 비율 | `rate(jvm_gc_pause_seconds_count[1m])` |
+| **HikariCP** | Active / Idle / Pending 커넥션 | `hikaricp_connections_active` |
+| **Kafka 랙** | 컨슈머 랙 (spring-kafka 활성화 시) | `kafka_consumer_records_lag` |
+
+### 로컬 개발 시 (Docker 없이)
+
+애플리케이션만 로컬 실행 중이라면 Prometheus + Grafana를 별도로 실행할 수 있습니다:
+
+```bash
+# 모니터링 스택만 실행
+docker-compose up -d prometheus grafana
+
+# 단, prometheus.yml의 타겟이 host.docker.internal:8081을 가리켜야 합니다
+# monitoring/prometheus/prometheus.yml 에서 targets 수정:
+#   - host.docker.internal:8081
+```
+
+### 디렉토리 구조
+
+```
+monitoring/
+├── prometheus/
+│   └── prometheus.yml            # 스크레이프 설정 (10초 간격)
+└── grafana/
+    ├── provisioning/
+    │   ├── datasources/
+    │   │   └── prometheus.yml    # Prometheus 데이터소스 자동 등록
+    │   └── dashboards/
+    │       └── dashboard.yml     # 대시보드 파일 경로 설정
+    └── dashboards/
+        └── mealfit.json          # MealFit 대시보드 (15개 패널)
+```
+
+---
+
 ## 🎨 설계 패턴
 
 - **Clean Architecture**: 계층 분리로 도메인 독립성 확보
