@@ -31,6 +31,8 @@ dependencies {
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testImplementation("com.h2database:h2")
+	testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
 	// postgresql
 	implementation("org.postgresql:postgresql:42.7.2")
 	// Swagger

@@ -2,6 +2,7 @@ package dev.mealfit.mealfit.common.security
 
 import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
+import io.jsonwebtoken.security.SecurityException as JwtSecurityException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -60,7 +61,7 @@ class JwtTokenProvider(
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken)
             return true
-        } catch (ex: SecurityException) {
+        } catch (ex: JwtSecurityException) {
             logger.error("Invalid JWT signature") // 잘못된 JWT 서명
         } catch (ex: MalformedJwtException) {
             logger.error("Invalid JWT token") // 유효하지 않은 JWT 토큰
