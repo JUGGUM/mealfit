@@ -72,6 +72,7 @@ services:
       - --storage.tsdb.retention.time=15d
       - --web.console.libraries=/usr/share/prometheus/console_libraries
       - --web.console.templates=/usr/share/prometheus/consoles
+      - --web.enable-remote-write-receiver
     depends_on:
       - app
     networks:
@@ -95,6 +96,24 @@ services:
       - prometheus
     networks:
       - mealfit-net
+
+  # ── k6 부하 테스트 ── docker-compose --profile loadtest run k6 <script>
+  k6:
+    image: grafana/k6:latest
+    profiles: [loadtest]
+    volumes:
+      - ./loadtest:/loadtest
+    environment:
+      # k6 → Prometheus Remote Write (메트릭을 Prometheus에 실시간 전송)
+      K6_PROMETHEUS_RW_SERVER_URL: http://prometheus:9090/api/v1/write
+      K6_PROMETHEUS_RW_PUSH_INTERVAL: 5s
+      K6_PROMETHEUS_RW_TREND_AS_NATIVE_HISTOGRAM: "true"
+      BASE_URL: http://app:8081
+    networks:
+      - mealfit-net
+    depends_on:
+      - prometheus
+      - app
 
 volumes:
   db_data:

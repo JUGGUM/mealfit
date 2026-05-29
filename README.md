@@ -332,7 +332,103 @@ monitoring/
     │   └── dashboards/
     │       └── dashboard.yml     # 대시보드 파일 경로 설정
     └── dashboards/
-        └── mealfit.json          # MealFit 대시보드 (15개 패널)
+        ├── mealfit.json          # MealFit 서버 모니터링 대시보드 (15개 패널)
+        └── k6.json               # k6 부하 테스트 대시보드 (12개 패널)
+```
+
+---
+
+## 🔥 k6 부하 테스트
+
+### 스크립트 구조
+
+```
+loadtest/
+├── scripts/
+│   ├── main.js      # 메인 부하 테스트: 50 → 100 → 200 VU 단계별 증가
+│   ├── smoke.js     # 스모크 테스트: 5 VU, 1분 (배포 후 빠른 검증)
+│   └── stress.js    # 스트레스 테스트: 한계 부하 탐색 (5% 에러 시 자동 중단)
+└── helpers/
+    └── auth.js      # 로그인 / 회원가입 공통 헬퍼
+```
+
+### 성공 기준 (Thresholds)
+
+| 지표 | 기준 |
+|------|------|
+| P95 응답시간 | **500ms 이하** |
+| P99 응답시간 | 1000ms 이하 |
+| 에러율 | **1% 이하** |
+
+### 실행 방법
+
+**① Docker Compose로 실행 (권장, Prometheus 연동 포함)**
+
+```bash
+# 전체 스택이 먼저 실행 중이어야 함
+docker-compose up -d
+
+# 메인 부하 테스트 (50→100→200 VU, 단계별 1분 유지)
+docker-compose --profile loadtest run --rm k6 \
+  run --out experimental-prometheus-rw /loadtest/scripts/main.js
+
+# 스모크 테스트 (빠른 검증)
+docker-compose --profile loadtest run --rm k6 \
+  run --out experimental-prometheus-rw /loadtest/scripts/smoke.js
+
+# 스트레스 테스트 (한계 탐색)
+docker-compose --profile loadtest run --rm k6 \
+  run --out experimental-prometheus-rw /loadtest/scripts/stress.js
+```
+
+**② k6 로컬 설치 후 실행**
+
+```bash
+# macOS
+brew install k6
+
+# Windows (Chocolatey)
+choco install k6
+
+# 로컬 앱 대상 메인 테스트
+k6 run loadtest/scripts/main.js
+
+# Prometheus 연동 포함 (로컬 앱 + Docker Prometheus)
+K6_PROMETHEUS_RW_SERVER_URL=http://localhost:9090/api/v1/write \
+  k6 run --out experimental-prometheus-rw loadtest/scripts/main.js
+```
+
+**③ BASE_URL 환경 변수로 대상 서버 변경**
+
+```bash
+# 개발 서버 대상
+BASE_URL=http://dev.mealfit.com k6 run loadtest/scripts/main.js
+
+# 스테이징 서버 대상 (Docker)
+docker-compose --profile loadtest run --rm \
+  -e BASE_URL=http://staging.mealfit.com k6 \
+  run --out experimental-prometheus-rw /loadtest/scripts/main.js
+```
+
+### Grafana k6 대시보드
+
+테스트 실행 중 http://localhost:3000 에서 **"MealFit k6 부하 테스트"** 대시보드를 확인하세요.
+
+| 패널 | 내용 |
+|------|------|
+| Active VUs / RPS / P95 / P99 / 에러율 | 실시간 요약 지표 |
+| VU 수 / RPS 추이 | 시간별 부하 변화 |
+| 응답시간 퍼센타일 (P50/P95/P99) | 지연 분포 |
+| 엔드포인트별 P95 / RPS / 에러 | API 단위 성능 비교 |
+| 데이터 송수신량 | 네트워크 처리량 |
+
+### 테스트 계정 정리
+
+```sql
+-- 부하 테스트 후 DB 정리 (PostgreSQL)
+DELETE FROM user_roles
+ WHERE user_id IN (SELECT id FROM users WHERE email LIKE 'lt_%@mealfit.test');
+DELETE FROM users WHERE email LIKE 'lt_%@mealfit.test';
 ```
 
 ---
